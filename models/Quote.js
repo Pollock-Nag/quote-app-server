@@ -1,23 +1,28 @@
-const mongoose = require("mongoose");
+const { supabase } = require("../config/db");
 
-const quoteSchema = new mongoose.Schema(
-  {
-    id: {
-      type: String,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-    },
-    author: {
-      type: String,
-      required: true,
-    },
+const columns = "id, text, author";
+
+const Quote = {
+  async findAll() {
+    const { data, error } = await supabase
+      .from("quotes")
+      .select(columns)
+      .order("id", { ascending: true });
+
+    if (error) throw error;
+    return data;
   },
-  { timestamps: true }
-);
 
-const Quote = mongoose.model("quotes", quoteSchema);
+  async findById(id) {
+    const { data, error } = await supabase
+      .from("quotes")
+      .select(columns)
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+};
 
 module.exports = Quote;

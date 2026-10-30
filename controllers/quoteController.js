@@ -3,7 +3,7 @@ const Quote = require("../models/Quote");
 
 const getQuotes = async (req, res) => {
   try {
-    const quotes = await Quote.find();
+    const quotes = await Quote.findAll();
     res.status(200).json(quotes);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,7 +13,7 @@ const getQuotes = async (req, res) => {
 
 const getQuoteById = async (req, res) => {
   try {
-    const quote = await Quote.findOne({ id: req.params.id });
+    const quote = await Quote.findById(req.params.id);
 
     if (!quote) {
       return res.status(404).json({ message: "Quote not found" });
